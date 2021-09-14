@@ -9,7 +9,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
     
