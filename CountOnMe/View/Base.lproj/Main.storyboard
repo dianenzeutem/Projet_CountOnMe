@@ -192,6 +192,9 @@
                                                 <state key="normal" title="×">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="operationButtonsTapped:" destination="eqK-jh-KKu" eventType="touchUpInside" id="IiD-3v-anj"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u1J-24-5lu">
                                                 <rect key="frame" x="0.0" y="78" width="101.5" height="63"/>
@@ -200,6 +203,9 @@
                                                 <state key="normal" title="÷">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="operationButtonsTapped:" destination="eqK-jh-KKu" eventType="touchUpInside" id="OBD-N3-NIZ"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -214,7 +220,7 @@
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="tappedAdditionButton:" destination="eqK-jh-KKu" eventType="touchUpInside" id="V0J-eg-vQK"/>
+                                                    <action selector="operationButtonsTapped:" destination="eqK-jh-KKu" eventType="touchUpInside" id="xzH-hI-GM4"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3zr-HC-0N9">
@@ -225,7 +231,7 @@
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="tappedSubstractionButton:" destination="eqK-jh-KKu" eventType="touchUpInside" id="KVX-AF-NVM"/>
+                                                    <action selector="operationButtonsTapped:" destination="eqK-jh-KKu" eventType="touchUpInside" id="Isw-rg-AEO"/>
                                                 </connections>
                                             </button>
                                         </subviews>
