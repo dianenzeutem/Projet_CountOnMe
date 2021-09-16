@@ -13,7 +13,7 @@ final class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
     
-   
+    
     
     // View Life cycles
     override func viewDidLoad() {
@@ -46,12 +46,12 @@ final class ViewController: UIViewController {
     }
     @IBAction func operationButtonsTapped(_ sender: UIButton) {
         guard let sign = sender.title(for: .normal) else { return }
-                userInput.tappedOperationButtons(operatorString: sign)
+        userInput.tappedOperationButtons(operatorString: sign)
     }
-
+    
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         userInput.tappedEqualButton()
     }
-
+    
 }
 

@@ -9,10 +9,43 @@
 import XCTest
 @testable import CountOnMe
 class UserInputTest: XCTestCase {
-
-    func testGivenInstanceOfUserInput_WhenAccessingIT_ThenItExists(){
-        let userInput = UserInput()
-    XCTAssertNotNil(userInput)
+    
+    var calcul : UserInput!
+    
+    override func setUp() {
+        super.setUp()
+        calcul = UserInput()
     }
-
+    
+    func testGivenTapped4Plus5_WhenTappedEqual_ThenResultIs9(){
+        calcul.numberButtonTapped(buttonTitle: "4")
+        calcul.tappedOperationButtons(operatorString: "+")
+        calcul.numberButtonTapped(buttonTitle: "5")
+        calcul.tappedEqualButton()
+        XCTAssertEqual(calcul.calculText , "4 + 5 = 9")
+    }
+    
+    func testGivenTapped10less9_WhenTappedEqual_ThenResultIs1(){
+        calcul.numberButtonTapped(buttonTitle: "10")
+        calcul.tappedOperationButtons(operatorString: "-")
+        calcul.numberButtonTapped(buttonTitle: "9")
+        calcul.tappedEqualButton()
+        XCTAssertEqual(calcul.calculText , "10 - 9 = 1")
+    }
+    
+    func testGivenTapped6x2_WhenTappedEqual_ThenResultIs12(){
+        calcul.numberButtonTapped(buttonTitle: "6")
+        calcul.tappedOperationButtons(operatorString: "×")
+        calcul.numberButtonTapped(buttonTitle: "2")
+        calcul.tappedEqualButton()
+        XCTAssertEqual(calcul.calculText , "6 × 2 = 12")
+    }
+    
+    func testGivenTapped3dividedby10_WhenTappedEqual_ThenResultIs3(){
+        calcul.numberButtonTapped(buttonTitle: "30")
+        calcul.tappedOperationButtons(operatorString: "÷")
+        calcul.numberButtonTapped(buttonTitle: "10")
+        calcul.tappedEqualButton()
+        XCTAssertEqual(calcul.calculText , "30 ÷ 10 = 3")
+    }
 }
