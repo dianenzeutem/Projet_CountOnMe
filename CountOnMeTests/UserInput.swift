@@ -82,15 +82,12 @@ final class UserInput {
     }
     // Action when equal button is pressed
     func tappedEqualButton() {
-        if expressionIsCorrect && expressionHaveEnoughElement {
-            let result = makeTheCalcul()
-            calculText.append(result)
-        }else {
-            sendAlertMessage(message: "Entrez une expression correcte !")
+        guard expressionIsCorrect else {
+            return sendAlertMessage(message: "Entrez une expression correcte !")
         }
-    }
-    
-    private func makeTheCalcul() -> String{
+        guard expressionHaveEnoughElement else {
+            return sendAlertMessage(message: "Démarrez un nouveau calcul !")
+        }
         var operationsToReduce = elements
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
