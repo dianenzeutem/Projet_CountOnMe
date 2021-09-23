@@ -14,29 +14,36 @@ final class UserInput {
             NotificationCenter.default.post(name: .updateTextMessage, object: nil, userInfo: ["updateMessage": calculText])
         }
     }
+    
     private var elements: [String] {
         return calculText.split(separator: " ").map { "\($0)" }
     }
+    
     // Error check computed variables
     private var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "×" && elements.last != "÷" && elements.last != "="
     }
+    
     // Expression Have Enough Element
     private var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
+    
     // Identifying the second to last element
     var secondToLastIsEqual: Bool {
-   return elements.count > 2 && elements[elements.count - 2] == "="
+        return elements.count > 2 && elements[elements.count - 2] == "="
     }
+    
     // Check if a completed operation is already displayed
     private var expressionHaveResult: Bool {
         return calculText.firstIndex(of: "=") != nil
     }
+    
     // clearing the display
     func clearDisplay() {
         calculText = ""
     }
+    
     // Action when a number is pressed
     func numberButtonTapped(buttonTitle: String) {
         if secondToLastIsEqual || elements.last == "=" {
@@ -48,6 +55,7 @@ final class UserInput {
             calculText.append(buttonTitle)
         }
     }
+    
     // Action when an operator is pressed
     func tappedOperationButtons(operatorString: String ) {
         if expressionIsCorrect {
@@ -59,27 +67,32 @@ final class UserInput {
             sendAlertMessage(message: "Un operateur est déja mis !")
         }
     }
+    
     func TappedPointButton() {
-            if expressionIsCorrect && elements.last?.firstIndex(of: ".") == nil {
-                if elements.isEmpty {
-                    calculText.append("0")
-                }
-                calculText.append(".")
+        if expressionIsCorrect && elements.last?.firstIndex(of: ".") == nil {
+            if elements.isEmpty {
+                calculText.append("0")
             }
+            calculText.append(".")
         }
+    }
+    
     // Action when AC button is pressed
     func tappedAc() {
         clearDisplay()
     }
+    
     private func lastResultText() {
-            let lastResult = elements.last!
-            clearDisplay()
-            calculText.append("\(lastResult)")
-        }
+        let lastResult = elements.last!
+        clearDisplay()
+        calculText.append("\(lastResult)")
+    }
+    
     // Sending alert notification
     private func sendAlertMessage(message: String) {
         NotificationCenter.default.post(name: .alertMessage, object: nil, userInfo: ["message": message])
     }
+    
     // Action when equal button is pressed
     func tappedEqualButton() {
         guard expressionIsCorrect else {
@@ -89,6 +102,10 @@ final class UserInput {
             return sendAlertMessage(message: "Démarrez un nouveau calcul !")
         }
         var operationsToReduce = elements
+        //        var priorityOperator: Bool {
+        //                    return (operationsToReduce.firstIndex(of: "x") != nil) || (operationsToReduce.firstIndex(of: "÷") != nil)
+        //                }
+        //
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
             guard let left = Double(operationsToReduce[0]) else {return }
@@ -108,10 +125,19 @@ final class UserInput {
         }
         calculText.append(" = \(operationsToReduce.first!)")
     }
+    
     private func formatingText(currentResult: Double) -> String {
         let numberFormater = NumberFormatter()
         numberFormater.numberStyle = .decimal
-        let numberAsString = numberFormater.string(from: NSNumber(value: currentResult))!
+        guard let numberAsString = numberFormater.string(from: NSNumber(value: currentResult)) else { return "ERROR" }
         return numberAsString
     }
+    
 }
+
+
+//["5", "+", "6", "x", "10"]
+//
+//let temp = ["5","+", "20"]
+//
+//temp = ["25"]
