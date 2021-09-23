@@ -82,12 +82,15 @@ final class UserInput {
     }
     // Action when equal button is pressed
     func tappedEqualButton() {
-        guard expressionIsCorrect else {
-            return sendAlertMessage(message: "Entrez une expression correcte !")
+        if expressionIsCorrect && expressionHaveEnoughElement {
+            let result = makeTheCalcul()
+            calculText.append(result)
+        }else {
+            sendAlertMessage(message: "Entrez une expression correcte !")
         }
-        guard expressionHaveEnoughElement else {
-            return sendAlertMessage(message: "Démarrez un nouveau calcul !")
-        }
+    }
+    
+    private func makeTheCalcul() -> String{
         var operationsToReduce = elements
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
@@ -102,9 +105,16 @@ final class UserInput {
             case "÷": result = left / right
             default: fatalError("Unknown operator !")
             }
+            let finalResult = formatingText(currentResult: result)
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
+            operationsToReduce.insert("\(finalResult)", at: 0)
         }
         calculText.append(" = \(operationsToReduce.first!)")
+    }
+    private func formatingText(currentResult: Double) -> String {
+        let numberFormater = NumberFormatter()
+        numberFormater.numberStyle = .decimal
+        let numberAsString = numberFormater.string(from: NSNumber(value: currentResult))!
+        return numberAsString
     }
 }

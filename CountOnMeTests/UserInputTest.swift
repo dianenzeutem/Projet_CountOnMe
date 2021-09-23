@@ -42,12 +42,18 @@ class UserInputTest: XCTestCase {
         calcul.tappedEqualButton()
         XCTAssertEqual(calcul.calculText, "30 ÷ 10 = 3")
     }
+    func testGivenTapped5dividedby2_WhenEqualisTapped_ThenResultIs2point5() {
+        calcul.numberButtonTapped(buttonTitle: "5")
+        calcul.tappedOperationButtons(operatorString: "÷")
+        calcul.numberButtonTapped(buttonTitle: "2")
+        calcul.tappedEqualButton()
+        XCTAssertEqual(calcul.calculText, "5 ÷ 2 = 2.5")
+    }
     func testGivendisplayIs1plus2equal3_WhenAcIsTapped_ThenScreenIsEmpty() {
         calcul.calculText = "1 + 2 = 3"
         calcul.tappedAc()
         XCTAssertEqual(calcul.calculText, "")
     }
-    
     func testGivenPointButtonAnd1When_ThenResult0Coma1() {
         calcul.tappedAc()
         calcul.TappedPointButton()
