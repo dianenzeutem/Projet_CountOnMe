@@ -11,7 +11,7 @@ import Foundation
 final class UserInput {
     var calculText: String = "1 + 1 = 2" {
         didSet {
-            NotificationCenter.default.post(name: Notification.Name("updateMessage"), object: nil, userInfo: ["updateMessage": calculText])
+            NotificationCenter.default.post(name: .updateTextMessage, object: nil, userInfo: ["updateMessage": calculText])
         }
     }
     private var elements: [String] {
@@ -19,15 +19,15 @@ final class UserInput {
     }
     // Error check computed variables
     private var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "×" && elements.last != "÷" && elements.last != "="
     }
     // Expression Have Enough Element
     private var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
-    // Check if an operator can be added
-    private var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
+    // Identifying the second to last element
+    var secondToLastIsEqual: Bool {
+   return elements.count > 2 && elements[elements.count - 2] == "="
     }
     // Check if a completed operation is already displayed
     private var expressionHaveResult: Bool {
@@ -39,28 +39,46 @@ final class UserInput {
     }
     // Action when a number is pressed
     func numberButtonTapped(buttonTitle: String) {
-        if expressionHaveResult {
+        if secondToLastIsEqual || elements.last == "=" {
             clearDisplay()
         }
-        calculText.append(buttonTitle)
+        if buttonTitle == "0" && elements.last == "÷" {
+            sendAlertMessage(message: "Vous ne pouvez pas diviser par 0 !")
+        } else {
+            calculText.append(buttonTitle)
+        }
     }
     // Action when an operator is pressed
     func tappedOperationButtons(operatorString: String ) {
-        if canAddOperator {
+        if expressionIsCorrect {
+            if secondToLastIsEqual {
+                lastResultText()
+            }
             calculText.append(" \(operatorString) ")
         } else {
             sendAlertMessage(message: "Un operateur est déja mis !")
         }
     }
+    func TappedPointButton() {
+            if expressionIsCorrect && elements.last?.firstIndex(of: ".") == nil {
+                if elements.isEmpty {
+                    calculText.append("0")
+                }
+                calculText.append(".")
+            }
+        }
     // Action when AC button is pressed
-    func tappedAc(){
+    func tappedAc() {
         clearDisplay()
     }
+    private func lastResultText() {
+            let lastResult = elements.last!
+            clearDisplay()
+            calculText.append("\(lastResult)")
+        }
     // Sending alert notification
     private func sendAlertMessage(message: String) {
-        let name = Notification.Name(rawValue: "alertMessage")
-        let notification = Notification(name: name, object: nil, userInfo: ["message": message])
-        NotificationCenter.default.post(notification)
+        NotificationCenter.default.post(name: .alertMessage, object: nil, userInfo: ["message": message])
     }
     // Action when equal button is pressed
     func tappedEqualButton() {
@@ -73,10 +91,10 @@ final class UserInput {
         var operationsToReduce = elements
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
+            guard let left = Double(operationsToReduce[0]) else {return }
             let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
-            let result: Int
+            guard let right = Double(operationsToReduce[2]) else {return}
+            let result: Double
             switch operand {
             case "+": result = left + right
             case "-": result = left - right

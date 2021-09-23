@@ -15,8 +15,8 @@ final class ViewController: UIViewController {
     // View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(displayCalcul(notification:)), name: Notification.Name("updateMessage"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(newAlert(message:)), name: Notification.Name("alertMessage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(displayCalcul(notification:)), name: .updateTextMessage, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(alertCalcul(notification:)), name: .alertMessage, object: nil)
     }
     @objc private func displayCalcul(notification: Notification) {
         if let userInfo = notification.userInfo {
@@ -25,8 +25,12 @@ final class ViewController: UIViewController {
             return
         }
     }
-    @objc private func newAlert(message: String) {
-        let alertVC = UIAlertController(title: "Zéro!", message: message, preferredStyle: .alert)
+    @objc private func alertCalcul(notification: Notification) {
+        guard let alertInfo = notification.userInfo!["message"] as? String else { return }
+               newAlert(message: alertInfo)
+    }
+    private func newAlert(message: String) {
+        let alertVC = UIAlertController(title: "Attention !", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         present(alertVC, animated: true, completion: nil)
     }
@@ -42,9 +46,12 @@ final class ViewController: UIViewController {
         userInput.tappedOperationButtons(operatorString: sign)
     }
     @IBAction func acButtonTapped(_ sender: UIButton) {
-        userInput.clearDisplay()
+        userInput.tappedAc()
+    }
+    @IBAction func pointButtonTapped(_ sender: UIButton) {
+        userInput.TappedPointButton()
     }
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        userInput.tappedAc()
+        userInput.tappedEqualButton()
     }
 }

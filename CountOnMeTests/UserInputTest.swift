@@ -47,4 +47,11 @@ class UserInputTest: XCTestCase {
         calcul.tappedAc()
         XCTAssertEqual(calcul.calculText, "")
     }
+    
+    func testGivenPointButtonAnd1When_ThenResult0Coma1() {
+        calcul.tappedAc()
+        calcul.TappedPointButton()
+        calcul.numberButtonTapped(buttonTitle: "1")
+           XCTAssertEqual(calcul.calculText, "0.1")
+       }
 }
