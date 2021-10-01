@@ -9,17 +9,21 @@
 import Foundation
 
 final class UserInput {
+    // variable containning the display text
     var calculText: String = "1 + 1 = 2" {
         didSet {
             NotificationCenter.default.post(name: .updateTextMessage, object: nil, userInfo: ["updateMessage": calculText])
         }
     }
     
+    // Transforms calculText into an array of Strings
     private var elements: [String] {
         return calculText.split(separator: " ").map { "\($0)" }
     }
     
-    // Error check computed variables
+    // MARK: - Error check
+    
+    // This boolean check that the text does not end with + or - or x or ÷ or =
     private var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "×" && elements.last != "÷" && elements.last != "="
     }
@@ -34,15 +38,12 @@ final class UserInput {
         return elements.count > 2 && elements[elements.count - 2] == "="
     }
     
-    // Check if a completed operation is already displayed
-    private var expressionHaveResult: Bool {
-        return calculText.firstIndex(of: "=") != nil
+    // Sending alert notification
+    private func sendAlertMessage(message: String) {
+        NotificationCenter.default.post(name: .alertMessage, object: nil, userInfo: ["message": message])
     }
     
-    // clearing the display
-    func clearDisplay() {
-        calculText = ""
-    }
+    // MARK: - Buttons methods
     
     // Action when a number is pressed
     func numberButtonTapped(buttonTitle: String) {
@@ -58,17 +59,20 @@ final class UserInput {
     
     // Action when an operator is pressed
     func tappedOperationButtons(operatorString: String ) {
-        if expressionIsCorrect {
+        if expressionIsCorrect && !elements.isEmpty {
             if secondToLastIsEqual {
                 lastResultText()
             }
             calculText.append(" \(operatorString) ")
         } else {
-            sendAlertMessage(message: "Un operateur est déja mis !")
+            sendAlertMessage(message: "Vous ne pouvez pas saisir d'opérateur !")
         }
     }
     
     func TappedPointButton() {
+        if secondToLastIsEqual || elements.last == "=" {
+            clearDisplay()
+        }
         if expressionIsCorrect && elements.last?.firstIndex(of: ".") == nil {
             if elements.isEmpty {
                 calculText.append("0")
@@ -82,62 +86,88 @@ final class UserInput {
         clearDisplay()
     }
     
+    // Action when equal button is pressed
+    func tappedEqualButton() {
+        if expressionIsCorrect && expressionHaveEnoughElement && elements.firstIndex(of: "=") == nil && !elements.isEmpty {
+            let result = makeCalcul()
+            calculText.append(" = \(result)")
+        } else {
+            sendAlertMessage(message: "Impossible ! Erreur de synthaxe dans votre opération. Veuillez entrer un chiffre ou corriger avec la touche AC.")
+        }
+    }
+    
+    // clearing the display
+    func clearDisplay() {
+        calculText = ""
+    }
+    
+    // This method takes the last element of elements and replaces all the text with this one
     private func lastResultText() {
-        let lastResult = elements.last!
+        guard let lastResult = elements.last else {return}
         clearDisplay()
         calculText.append("\(lastResult)")
     }
     
-    // Sending alert notification
-    private func sendAlertMessage(message: String) {
-        NotificationCenter.default.post(name: .alertMessage, object: nil, userInfo: ["message": message])
-    }
+    // MARK: - Calcul Methods
     
-    // Action when equal button is pressed
-    func tappedEqualButton() {
-        guard expressionIsCorrect else {
-            return sendAlertMessage(message: "Entrez une expression correcte !")
-        }
-        guard expressionHaveEnoughElement else {
-            return sendAlertMessage(message: "Démarrez un nouveau calcul !")
-        }
+    // This method calculates the result of the operation
+    func makeCalcul() -> String {
         var operationsToReduce = elements
-        //        var priorityOperator: Bool {
-        //                    return (operationsToReduce.firstIndex(of: "x") != nil) || (operationsToReduce.firstIndex(of: "÷") != nil)
-        //                }
-        //
-        // Iterate over operations while an operand still here
-        while operationsToReduce.count > 1 {
-            guard let left = Double(operationsToReduce[0]) else {return }
-            let operand = operationsToReduce[1]
-            guard let right = Double(operationsToReduce[2]) else {return}
-            let result: Double
-            switch operand {
-            case "+": result = left + right
-            case "-": result = left - right
-            case "×": result = left * right
-            case "÷": result = left / right
-            default: fatalError("Unknown operator !")
-            }
-            let finalResult = formatingText(currentResult: result)
-            operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(finalResult)", at: 0)
+        var priorityOperator: Bool {
+            return (operationsToReduce.firstIndex(of: "×") != nil) || (operationsToReduce.firstIndex(of: "÷") != nil)
         }
-        calculText.append(" = \(operationsToReduce.first!)")
+        while operationsToReduce.count > 1 {
+            while priorityOperator {
+                if let indexTempOfOperator = operationsToReduce.firstIndex(where: {$0 == "×" || $0 == "÷"}) {
+                    let operand = operationsToReduce[indexTempOfOperator]
+                    if let leftNumber = Double(operationsToReduce[indexTempOfOperator - 1]) {
+                        if let rightNumber = Double(operationsToReduce[indexTempOfOperator + 1]) {
+                            var priorityOperationsResult: Double = 0.0
+                            
+                            if operand == "×" {
+                                priorityOperationsResult = leftNumber * rightNumber
+                            } else {
+                                if rightNumber != 0 { priorityOperationsResult = leftNumber / rightNumber
+                                } else {
+                                    sendAlertMessage(message: "Impossible de diviser par 0")
+                                    calculText.append("Erreur")
+                                }
+                            }
+                            operationsToReduce[indexTempOfOperator - 1] = formatingText(currentResult: priorityOperationsResult)
+                            operationsToReduce.remove(at: indexTempOfOperator + 1)
+                            operationsToReduce.remove(at: indexTempOfOperator)
+                        }
+                        
+                    }
+                }
+                
+            }
+            if operationsToReduce.count > 1 {
+                if let left = Double(operationsToReduce[0]) {
+                    let operand = operationsToReduce[1]
+                    if let right = Double(operationsToReduce[2]) {
+                        var result: Double = 0
+                        if operand == "+" { result = left + right
+                        }
+                        if operand == "-" { result = left - right
+                        }
+                        operationsToReduce = Array(operationsToReduce.dropFirst(3))
+                        operationsToReduce.insert("\(formatingText(currentResult: result))", at: 0)
+                    }
+                    
+                }
+                
+            }
+        }
+        guard let operationToReturn = operationsToReduce.first else {return " " }
+        return operationToReturn
+        
     }
-    
+    // This function formats a Double into a String with or without the comma as required
     private func formatingText(currentResult: Double) -> String {
         let numberFormater = NumberFormatter()
         numberFormater.numberStyle = .decimal
         guard let numberAsString = numberFormater.string(from: NSNumber(value: currentResult)) else { return "ERROR" }
         return numberAsString
     }
-    
 }
-
-
-//["5", "+", "6", "x", "10"]
-//
-//let temp = ["5","+", "20"]
-//
-//temp = ["25"]
