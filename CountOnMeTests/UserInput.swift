@@ -112,34 +112,31 @@ final class UserInput {
     
     // This method calculates the result of the operation
     func makeCalcul() -> String {
+        
         var operationsToReduce = elements
         var priorityOperator: Bool {
             return (operationsToReduce.firstIndex(of: "×") != nil) || (operationsToReduce.firstIndex(of: "÷") != nil)
         }
+        
         while operationsToReduce.count > 1 {
             while priorityOperator {
-                if let indexTempOfOperator = operationsToReduce.firstIndex(where: {$0 == "×" || $0 == "÷"}) {
-                    let operand = operationsToReduce[indexTempOfOperator]
-                    if let leftNumber = Double(operationsToReduce[indexTempOfOperator - 1]) {
-                        if let rightNumber = Double(operationsToReduce[indexTempOfOperator + 1]) {
-                            var priorityOperationsResult: Double = 0.0
-                            
-                            if operand == "×" {
-                                priorityOperationsResult = leftNumber * rightNumber
-                            } else {
-                                if rightNumber != 0 { priorityOperationsResult = leftNumber / rightNumber
-                                } else {
-                                    sendAlertMessage(message: "Impossible de diviser par 0")
-                                    calculText.append("Erreur")
-                                }
-                            }
-                            operationsToReduce[indexTempOfOperator - 1] = formatingText(currentResult: priorityOperationsResult)
-                            operationsToReduce.remove(at: indexTempOfOperator + 1)
-                            operationsToReduce.remove(at: indexTempOfOperator)
-                        }
-                        
+                guard let indexTempOfOperator = (operationsToReduce.firstIndex(where: {$0 == "×" || $0 == "÷"})), let leftNumber = Double(operationsToReduce[indexTempOfOperator - 1]), let rightNumber = Double(operationsToReduce[indexTempOfOperator + 1]) else { return "" }
+                
+                let operand = operationsToReduce[indexTempOfOperator]
+                var priorityOperationsResult: Double = 0.0
+                
+                if operand == "×" {
+                    priorityOperationsResult = Double(leftNumber * rightNumber)
+                } else {
+                    if rightNumber != 0 { priorityOperationsResult = Double(leftNumber / rightNumber)
+                    } else {
+                        sendAlertMessage(message: "Impossible de diviser par 0")
+                        calculText.append("Erreur")
                     }
                 }
+                operationsToReduce[indexTempOfOperator - 1] = formatingText(currentResult: priorityOperationsResult)
+                operationsToReduce.remove(at: indexTempOfOperator + 1)
+                operationsToReduce.remove(at: indexTempOfOperator)
                 
             }
             if operationsToReduce.count > 1 {

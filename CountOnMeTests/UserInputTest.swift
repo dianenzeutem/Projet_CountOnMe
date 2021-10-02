@@ -74,4 +74,12 @@ class UserInputTest: XCTestCase {
         calcul.tappedEqualButton()
             XCTAssertEqual(calcul.calculText, "5 + 6 ÷ 3 - 2 × 3 = 1")
         }
+    // test
+    func testGivenBigOperation_WhenTapedEqual_ThenResultIs35dot25() {
+            calcul.calculText = "8 × 2 + 5 × 4 - 3 ÷ 4"
+        calcul.tappedEqualButton()
+            XCTAssertEqual(calcul.calculText, "8 × 2 + 5 × 4 - 3 ÷ 4 = 35.25")
+        }
+    
 }
+
