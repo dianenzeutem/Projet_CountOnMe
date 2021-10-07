@@ -49,6 +49,7 @@ class UserInputTest: XCTestCase {
         calcul.tappedEqualButton()
         XCTAssertEqual(calcul.calculText, "5 ÷ 2 = 2.5")
     }
+   
     func testGivenDisplayIs1plus2equal3_WhenAcIsTapped_ThenScreenIsEmpty() {
         calcul.calculText = "1 + 2 = 3"
         calcul.tappedAc()
@@ -60,6 +61,13 @@ class UserInputTest: XCTestCase {
         calcul.numberButtonTapped(buttonTitle: "1")
            XCTAssertEqual(calcul.calculText, "0.1")
        }
+    
+    func testGiven3Plus2Equal5_WhenPointIsPressed_Then0Point() {
+        calcul.calculText = "3 + 2 = 5"
+        calcul.TappedPointButton()
+        XCTAssertEqual(calcul.calculText, "0.")
+    }
+    
     func testGivenresultIs7_WhenPressOperator_ThenCalculTextIs7() {
         calcul.numberButtonTapped(buttonTitle: "5")
         calcul.tappedOperationButtons(operatorString: "+")
@@ -81,5 +89,17 @@ class UserInputTest: XCTestCase {
             XCTAssertEqual(calcul.calculText, "8 × 2 + 5 × 4 - 3 ÷ 4 = 35.25")
         }
     
+    func testGiven3dividedby_When0IsPressed_Then0IsntAdded() {
+        calcul.calculText = "3 ÷ "
+        calcul.numberButtonTapped(buttonTitle: "0")
+        XCTAssertFalse(calcul.calculText == "3 ÷ 0")
+    }
+    
+    func testGiven3Plus_WhenPlusIsPressed_ThenPlusNotAdded() {
+        calcul.calculText = "3 + "
+        calcul.tappedOperationButtons(operatorString: "+")
+        XCTAssertFalse(calcul.calculText == "3 + + ")
+        
+    }
 }
 
