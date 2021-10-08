@@ -15,7 +15,7 @@
 		1FA43BF3224E569A00F565CB /* CountOnMeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA43BF2224E569A00F565CB /* CountOnMeUITests.swift */; };
 		5A555E6926FC5A5A00FB3D45 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A555E6826FC5A5A00FB3D45 /* Notification.swift */; };
 		5A80FEE026F0880A00FD7A9C /* UserInputTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A80FEDF26F0880A00FD7A9C /* UserInputTest.swift */; };
-		5A80FEE226F0888C00FD7A9C /* Us erInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A80FEE126F0888C00FD7A9C /* Us erInput.swift */; };
+		5A80FEE226F0888C00FD7A9C /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A80FEE126F0888C00FD7A9C /* UserInput.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +50,7 @@
 		1FA43BF4224E569A00F565CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A555E6826FC5A5A00FB3D45 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		5A80FEDF26F0880A00FD7A9C /* UserInputTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputTest.swift; sourceTree = "<group>"; };
-		5A80FEE126F0888C00FD7A9C /* Us erInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Us erInput.swift"; path = "CountOnMeTests/Us erInput.swift"; sourceTree = SOURCE_ROOT; };
+		5A80FEE126F0888C00FD7A9C /* UserInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserInput.swift; path = CountOnMeTests/UserInput.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +131,7 @@
 		5A6E163426EF387E0015DDA4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5A80FEE126F0888C00FD7A9C /* Us erInput.swift */,
+				5A80FEE126F0888C00FD7A9C /* UserInput.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -296,7 +296,7 @@
 			files = (
 				5A555E6926FC5A5A00FB3D45 /* Notification.swift in Sources */,
 				1FA43BD5224E569900F565CB /* ViewController.swift in Sources */,
-				5A80FEE226F0888C00FD7A9C /* Us erInput.swift in Sources */,
+				5A80FEE226F0888C00FD7A9C /* UserInput.swift in Sources */,
 				1FA43BD3224E569900F565CB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

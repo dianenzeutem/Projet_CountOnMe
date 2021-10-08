@@ -112,19 +112,15 @@ final class UserInput {
     
     // This method calculates the result of the operation
     func makeCalcul() -> String {
-        
         var operationsToReduce = elements
         var priorityOperator: Bool {
             return (operationsToReduce.firstIndex(of: "×") != nil) || (operationsToReduce.firstIndex(of: "÷") != nil)
         }
-        
         while operationsToReduce.count > 1 {
             while priorityOperator {
                 guard let indexTempOfOperator = (operationsToReduce.firstIndex(where: {$0 == "×" || $0 == "÷"})), let leftNumber = Double(operationsToReduce[indexTempOfOperator - 1]), let rightNumber = Double(operationsToReduce[indexTempOfOperator + 1]) else { return "" }
-                
                 let operand = operationsToReduce[indexTempOfOperator]
                 var priorityOperationsResult: Double = 0.0
-                
                 if operand == "×" {
                     priorityOperationsResult = Double(leftNumber * rightNumber)
                 } else {
@@ -137,7 +133,6 @@ final class UserInput {
                 operationsToReduce[indexTempOfOperator - 1] = formatingText(currentResult: priorityOperationsResult)
                 operationsToReduce.remove(at: indexTempOfOperator + 1)
                 operationsToReduce.remove(at: indexTempOfOperator)
-                
             }
             if operationsToReduce.count > 1 {
                 if let left = Double(operationsToReduce[0]) {
@@ -151,15 +146,13 @@ final class UserInput {
                         operationsToReduce = Array(operationsToReduce.dropFirst(3))
                         operationsToReduce.insert("\(formatingText(currentResult: result))", at: 0)
                     }
-                    
                 }
-                
             }
         }
         guard let operationToReturn = operationsToReduce.first else {return " " }
         return operationToReturn
-        
     }
+    
     // This function formats a Double into a String with or without the comma as required
     private func formatingText(currentResult: Double) -> String {
         let numberFormater = NumberFormatter()
